@@ -24,7 +24,7 @@ This is a **real-time subscription dashboard** designed to demonstrate:
 
 ## 🛠️ Tech Stack
 
-### Frontend
+### Client
 - **React 18** - UI library with functional components
 - **React Router** - Client-side routing
 - **Socket.IO Client** - Real-time WebSocket communication
@@ -32,7 +32,7 @@ This is a **real-time subscription dashboard** designed to demonstrate:
 - **Axios** - HTTP client for REST APIs
 - **Context API** - State management
 
-### Backend
+### Server
 - **Node.js + Express** - Server framework
 - **Socket.IO** - WebSocket server for real-time updates
 - **MongoDB + Mongoose** - Database and ODM
@@ -43,7 +43,7 @@ This is a **real-time subscription dashboard** designed to demonstrate:
 
 ```
 stock broker/
-├── backend/
+├── server/
 │   ├── config/
 │   │   └── db.js              # MongoDB connection
 │   ├── middleware/
@@ -59,7 +59,7 @@ stock broker/
 │   ├── package.json
 │   └── server.js              # Main server file
 │
-└── frontend/
+└── client/
     ├── public/
     │   └── index.html
     ├── src/
@@ -87,7 +87,7 @@ stock broker/
     │   ├── App.js             # Root component with routing
     │   ├── index.js           # React entry point
     │   └── index.css          # Global styles
-    ├── .env                   # Frontend environment variables
+    ├── .env                   # Client environment variables
     └── package.json
 ```
 
@@ -107,11 +107,11 @@ stock broker/
 cd "d:\anand\stock broker"
 ```
 
-#### 2. Backend Setup
+#### 2. Server Setup
 
 ```bash
-# Navigate to backend directory
-cd backend
+# Navigate to server directory
+cd server
 
 # Install dependencies
 npm install
@@ -126,11 +126,11 @@ copy .env.example .env
 # NODE_ENV=development
 ```
 
-#### 3. Frontend Setup
+#### 3. Client Setup
 
 ```bash
-# Navigate to frontend directory
-cd ../frontend
+# Navigate to client directory
+cd ../client
 
 # Install dependencies
 npm install
@@ -149,19 +149,19 @@ net start MongoDB
 
 ## ▶️ Running the Application
 
-### Start Backend Server
+### Start Server
 
 ```bash
-cd backend
+cd server
 npm run dev
 ```
 
 The server will start on `http://localhost:5000`
 
-### Start Frontend Development Server
+### Start Client Development Server
 
 ```bash
-cd frontend
+cd client
 npm start
 ```
 
@@ -256,26 +256,26 @@ The React app will start on `http://localhost:3000`
 # Make sure MongoDB is running
 net start MongoDB
 
-# Check connection string in backend/.env
+# Check connection string in server/.env
 MONGODB_URI=mongodb://localhost:27017/stock-broker
 ```
 
 ### Socket.IO Connection Failed
 ```bash
-# Ensure backend server is running on port 5000
-# Check REACT_APP_SOCKET_URL in frontend/.env
+# Ensure server is running on port 5000
+# Check REACT_APP_SOCKET_URL in client/.env
 REACT_APP_SOCKET_URL=http://localhost:5000
 ```
 
 ### Port Already in Use
 ```bash
-# Backend: Change PORT in backend/.env
-# Frontend: Set PORT=3001 in frontend/.env
+# Server: Change PORT in server/.env
+# Client: Set PORT=3001 in client/.env
 ```
 
 ## 📝 Environment Variables
 
-### Backend (.env)
+### Server (.env)
 ```
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/stock-broker
@@ -283,7 +283,7 @@ JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
 NODE_ENV=development
 ```
 
-### Frontend (.env)
+### Client (.env)
 ```
 REACT_APP_API_URL=http://localhost:5000
 REACT_APP_SOCKET_URL=http://localhost:5000
@@ -291,7 +291,7 @@ REACT_APP_SOCKET_URL=http://localhost:5000
 
 ## 🚢 Production Deployment
 
-### Backend
+### Server
 1. Set `NODE_ENV=production`
 2. Use strong `JWT_SECRET`
 3. Configure MongoDB Atlas connection string
@@ -299,7 +299,7 @@ REACT_APP_SOCKET_URL=http://localhost:5000
 5. Use HTTPS
 6. Deploy to Heroku, DigitalOcean, AWS, etc.
 
-### Frontend
+### Client
 1. Update API URLs to production backend
 2. Build: `npm run build`
 3. Deploy build folder to Netlify, Vercel, or S3

@@ -1,0 +1,40 @@
+# Dependencies - will be installed fresh in container
+node_modules
+
+# Development files
+npm-debug.log*
+.npm
+
+# Environment files - these should be injected at runtime
+.env
+.env.local
+.env.*.local
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Test files
+*.test.js
+*.spec.js
+__tests__
+coverage
+
+# Docker files (no need to copy these into the image)
+Dockerfile
+docker-compose.yml
+.dockerignore

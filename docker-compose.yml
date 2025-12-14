@@ -1,0 +1,122 @@
+# =============================================================================
+# Docker Compose - Stock Broker Application
+# Production-style multi-container orchestration
+# =============================================================================
+# 
+# This file defines three services:
+# 1. MongoDB - Database for user data and subscriptions
+# 2. Backend - Node.js API server with Socket.IO
+# 3. Frontend - React app served via Nginx
+#
+# Run with: docker-compose up --build
+# Stop with: docker-compose down
+# Remove volumes: docker-compose down -v
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # MongoDB Database
+  # Official MongoDB image with persistent volume
+  # ---------------------------------------------------------------------------
+  mongodb:
+    image: mongo:7
+    container_name: stockflow-mongodb
+    restart: unless-stopped
+    environment:
+      # MongoDB credentials - should be changed in production
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-password123}
+      MONGO_INITDB_DATABASE: stockbroker
+    volumes:
+      # Persist data across container restarts
+      - mongodb_data:/data/db
+      # Optional: MongoDB config
+      - mongodb_config:/data/configdb
+    networks:
+      - stockflow-network
+    # Health check to ensure MongoDB is ready before backend connects
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # Only expose port in development (comment out for production)
+    # ports:
+    #   - "27017:27017"
+
+  # ---------------------------------------------------------------------------
+  # Backend - Node.js + Express + Socket.IO
+  # Handles API requests and real-time stock price streaming
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: stockflow-backend
+    restart: unless-stopped
+    environment:
+      # Server configuration
+      NODE_ENV: production
+      PORT: 5000
+      
+      # MongoDB connection string using Docker service name
+      # Docker DNS resolves 'mongodb' to the MongoDB container
+      MONGODB_URI: mongodb://${MONGO_ROOT_USERNAME:-admin}:${MONGO_ROOT_PASSWORD:-password123}@mongodb:27017/stockbroker?authSource=admin
+      
+      # JWT Secret for authentication (CHANGE IN PRODUCTION!)
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      
+      # CORS - Frontend URL (using nginx proxy, so same origin)
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+    networks:
+      - stockflow-network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    # Only expose port directly in development
+    # In production, nginx proxies to backend
+    # ports:
+    #   - "5000:5000"
+
+  # ---------------------------------------------------------------------------
+  # Frontend - React + Nginx
+  # Serves static React build and proxies API/WebSocket to backend
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        # Build-time environment variables for React
+        # These get baked into the JavaScript bundle
+        # Using relative URLs since nginx proxies to backend
+        REACT_APP_API_URL: ""
+        REACT_APP_SOCKET_URL: ""
+    container_name: stockflow-frontend
+    restart: unless-stopped
+    ports:
+      # Expose on port 80 (or 3000 if 80 is in use)
+      - "${FRONTEND_PORT:-80}:80"
+    networks:
+      - stockflow-network
+    depends_on:
+      - backend
+
+# =============================================================================
+# Networks
+# Using bridge network for container-to-container communication
+# =============================================================================
+networks:
+  stockflow-network:
+    driver: bridge
+
+# =============================================================================
+# Volumes
+# Named volumes for data persistence
+# =============================================================================
+volumes:
+  mongodb_data:
+    name: stockflow-mongodb-data
+  mongodb_config:
+    name: stockflow-mongodb-config

@@ -43,7 +43,13 @@ This is a **real-time subscription dashboard** designed to demonstrate:
 
 ```
 stock broker/
+├── docker-compose.yml         # 🐳 Container orchestration
+├── .env                       # Environment variables
+├── .env.example               # Environment template
+├── DOCKER.md                  # Docker documentation
 ├── server/
+│   ├── Dockerfile             # 🐳 Backend container
+│   ├── .dockerignore
 │   ├── config/
 │   │   └── db.js              # MongoDB connection
 │   ├── middleware/
@@ -60,6 +66,9 @@ stock broker/
 │   └── server.js              # Main server file
 │
 └── client/
+    ├── Dockerfile             # 🐳 Frontend container
+    ├── nginx.conf             # 🐳 Nginx reverse proxy config
+    ├── .dockerignore
     ├── public/
     │   └── index.html
     ├── src/
@@ -149,7 +158,43 @@ net start MongoDB
 
 ## ▶️ Running the Application
 
-### Start Server
+### Option 1: Docker (Recommended) 🐳
+
+Run the entire application with a single command using Docker:
+
+```bash
+# Navigate to project root
+cd "d:\anand\stock broker"
+
+# Build and start all services
+docker-compose up --build
+
+# Or run in detached mode (background)
+docker-compose up --build -d
+```
+
+**Access the app at:** http://localhost:3000
+
+**Stop the application:**
+```bash
+docker-compose down
+
+# To also remove database data:
+docker-compose down -v
+```
+
+This starts three containers:
+- **Frontend** (Nginx) - Serves React app and proxies API requests
+- **Backend** (Node.js) - REST API + Socket.IO server
+- **MongoDB** - Database
+
+See [DOCKER.md](DOCKER.md) for detailed Docker documentation.
+
+---
+
+### Option 2: Manual Setup (Development)
+
+#### Start Server
 
 ```bash
 cd server
@@ -291,7 +336,39 @@ REACT_APP_SOCKET_URL=http://localhost:5000
 
 ## 🚢 Production Deployment
 
-### Server
+### Docker Deployment (Recommended)
+
+The project includes production-ready Docker configuration:
+
+```bash
+# Clone and navigate to project
+cd "stock broker"
+
+# Configure environment (optional)
+cp .env.example .env
+# Edit .env with your settings
+
+# Build and run
+docker-compose up --build -d
+
+# View logs
+docker-compose logs -f
+
+# Stop
+docker-compose down
+```
+
+**Docker Features:**
+- ✅ Multi-stage builds for optimized images
+- ✅ Nginx reverse proxy with WebSocket support
+- ✅ MongoDB with persistent volumes
+- ✅ Health checks for all services
+- ✅ Automatic service restart
+- ✅ Environment-based configuration
+
+See [DOCKER.md](DOCKER.md) for complete Docker documentation.
+
+### Manual Server Deployment
 1. Set `NODE_ENV=production`
 2. Use strong `JWT_SECRET`
 3. Configure MongoDB Atlas connection string
@@ -299,7 +376,7 @@ REACT_APP_SOCKET_URL=http://localhost:5000
 5. Use HTTPS
 6. Deploy to Heroku, DigitalOcean, AWS, etc.
 
-### Client
+### Manual Client Deployment
 1. Update API URLs to production backend
 2. Build: `npm run build`
 3. Deploy build folder to Netlify, Vercel, or S3

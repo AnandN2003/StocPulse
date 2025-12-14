@@ -1,0 +1,44 @@
+# Dependencies - will be installed fresh in container
+node_modules
+
+# Build output - will be generated in container
+build
+dist
+
+# Development files
+npm-debug.log*
+.npm
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Test files
+*.test.js
+*.spec.js
+__tests__
+coverage
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore

@@ -12,10 +12,10 @@ const app = express();
 const server = http.createServer(app);
 
 // CORS configuration
+// In Docker, nginx proxies requests so we allow the configured origin
+const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'your-production-url.com' 
-    : 'http://localhost:3000',
+  origin: corsOrigin,
   credentials: true
 }));
 
@@ -38,9 +38,7 @@ app.get('/api/health', (req, res) => {
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: process.env.NODE_ENV === 'production' 
-      ? 'your-production-url.com' 
-      : 'http://localhost:3000',
+    origin: corsOrigin,
     credentials: true
   }
 });

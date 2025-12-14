@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import DotGrid from '../components/DotGrid';
 import AuthModal from '../components/AuthModal';
+import PillNav from '../components/PillNav';
 import './LandingPage.css';
 
 const LandingPage = () => {
@@ -47,28 +48,22 @@ const LandingPage = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="navbar">
-        <div className="nav-container">
-          <div className="logo">
-            <span className="logo-icon">📈</span>
-            <span className="logo-text">StockFlow</span>
-          </div>
-          <div className="nav-links">
-            <button onClick={() => scrollToSection('features')} className="nav-link">
-              Features
-            </button>
-            <button onClick={() => scrollToSection('how-it-works')} className="nav-link">
-              Learn More
-            </button>
-            <button onClick={() => openAuthModal('login')} className="btn-nav-login">
-              Login
-            </button>
-            <button onClick={() => openAuthModal('signup')} className="btn-nav-signup">
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </nav>
+      <PillNav
+        logo="/Gemini_Generated_Image_pgcl58pgcl58pgcl.png"
+        logoAlt="StockFlow"
+        items={[
+          { label: 'Features', onClick: () => scrollToSection('features') },
+          { label: 'Learn More', onClick: () => scrollToSection('how-it-works') },
+          { label: 'Login', onClick: () => openAuthModal('login') },
+          { label: 'Sign Up', onClick: () => openAuthModal('signup') }
+        ]}
+        activeHref="/"
+        ease="power2.easeOut"
+        baseColor="#000000"
+        pillColor="#ffffff"
+        hoveredPillTextColor="#ffffff"
+        pillTextColor="#000000"
+      />
 
       {/* Hero Section */}
       <section className="hero">
@@ -116,37 +111,37 @@ const LandingPage = () => {
           
           <div className="features-grid">
             <div className="feature-card">
-              <div className="feature-icon">⚡</div>
+              <div className="feature-icon">01</div>
               <h3>Real-Time Updates</h3>
               <p>Get stock price updates every second without refreshing your browser</p>
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon">🎯</div>
+              <div className="feature-icon">02</div>
               <h3>Custom Subscriptions</h3>
               <p>Subscribe only to stocks you care about: GOOG, TSLA, AMZN, META, NVDA</p>
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon">👥</div>
+              <div className="feature-icon">03</div>
               <h3>Multi-User Support</h3>
               <p>Each user gets their own personalized dashboard with independent subscriptions</p>
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon">🔒</div>
+              <div className="feature-icon">04</div>
               <h3>Secure Authentication</h3>
               <p>Your data is protected with industry-standard JWT authentication</p>
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon">🚀</div>
+              <div className="feature-icon">05</div>
               <h3>Lightning Fast</h3>
               <p>Built with Socket.IO for instant, bidirectional communication</p>
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon">📱</div>
+              <div className="feature-icon">06</div>
               <h3>Responsive Design</h3>
               <p>Beautiful interface that works perfectly on desktop, tablet, and mobile</p>
             </div>

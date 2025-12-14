@@ -1,0 +1,117 @@
+.stock-selector {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.stock-selector h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.selector-error {
+  background: rgba(255, 68, 102, 0.1);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--danger);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.stocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stock-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.stock-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--primary-blue);
+}
+
+.stock-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stock-icon {
+  font-size: 2rem;
+}
+
+.stock-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stock-ticker {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stock-name {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.btn-subscribe {
+  padding: 0.625rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-pink));
+  border: none;
+  color: white;
+}
+
+.btn-subscribe:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(233, 71, 245, 0.3);
+}
+
+.btn-subscribe.subscribed {
+  background: rgba(255, 68, 102, 0.1);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+.btn-subscribe.subscribed:hover:not(:disabled) {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-subscribe:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 640px) {
+  .stock-item {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .btn-subscribe {
+    width: 100%;
+  }
+}

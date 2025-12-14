@@ -1,0 +1,183 @@
+.stock-card {
+  background: linear-gradient(135deg, var(--bg-card), rgba(22, 22, 42, 0.8));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.75rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.stock-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--primary-pink));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.stock-card:hover::before {
+  opacity: 1;
+}
+
+.stock-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-blue);
+  box-shadow: 0 20px 40px rgba(47, 75, 162, 0.2);
+}
+
+.stock-card.price-up {
+  animation: flashGreen 0.6s ease-out;
+}
+
+.stock-card.price-down {
+  animation: flashRed 0.6s ease-out;
+}
+
+@keyframes flashGreen {
+  0%, 100% {
+    background: linear-gradient(135deg, var(--bg-card), rgba(22, 22, 42, 0.8));
+  }
+  50% {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(22, 22, 42, 0.8));
+  }
+}
+
+@keyframes flashRed {
+  0%, 100% {
+    background: linear-gradient(135deg, var(--bg-card), rgba(22, 22, 42, 0.8));
+  }
+  50% {
+    background: linear-gradient(135deg, rgba(255, 68, 102, 0.1), rgba(22, 22, 42, 0.8));
+  }
+}
+
+.stock-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.stock-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stock-card-icon {
+  font-size: 2rem;
+}
+
+.stock-card-ticker {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stock-card-name {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.125rem;
+}
+
+.disconnected-badge {
+  font-size: 1.25rem;
+  opacity: 0.7;
+}
+
+.stock-price-section {
+  margin-bottom: 1.5rem;
+}
+
+.current-price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.price-change {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.price-change.positive {
+  color: var(--success);
+}
+
+.price-change.negative {
+  color: var(--danger);
+}
+
+.change-arrow {
+  font-size: 0.75rem;
+}
+
+.change-amount,
+.change-percent {
+  font-variant-numeric: tabular-nums;
+}
+
+.loading-price {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+  padding: 2rem 0;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.stock-card-footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 8px var(--success);
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 4px var(--success);
+  }
+}

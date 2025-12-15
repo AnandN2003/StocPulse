@@ -2,6 +2,18 @@
 
 A real-time stock market dashboard built with the MERN stack (MongoDB, Express, React, Node.js) and Socket.IO for asynchronous operations and live price streaming.
 
+<p align="center">
+  <img src="./product.png" alt="Project Banner" width="100%" />
+</p>
+
+<p align="center">
+  <img src="./Dashboard.png" alt="Project Banner" width="100%" />
+</p>
+
+<p align="center">
+  <img src="./My Stocks.png" alt="Project Banner" width="100%" />
+</p>
+
 ##  Project Overview
 
 This is a **real-time subscription dashboard** designed to demonstrate:

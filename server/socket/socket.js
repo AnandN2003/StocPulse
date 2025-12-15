@@ -51,24 +51,24 @@ const initializeSocket = (io) => {
   io.on('connection', async (socket) => {
     console.log(`User connected: ${socket.userEmail} (${socket.id})`);
 
-    // Get user's subscriptions from database
+    // Auto-join all stock rooms so all users see real-time prices for all stocks
+    SUPPORTED_STOCKS.forEach(ticker => {
+      socket.join(ticker);
+    });
+    console.log(`${socket.userEmail} joined all stock rooms`);
+
+    // Send initial prices for ALL stocks (not just subscribed)
+    const initialPrices = {};
+    SUPPORTED_STOCKS.forEach(ticker => {
+      initialPrices[ticker] = stockPrices[ticker];
+    });
+    socket.emit('initial-prices', initialPrices);
+
+    // Get user's subscriptions from database and send to client
     try {
       const user = await User.findById(socket.userId);
       const subscriptions = user.subscriptions || [];
-
-      // Join rooms for each subscribed stock
-      subscriptions.forEach(ticker => {
-        socket.join(ticker);
-        console.log(`${socket.userEmail} joined room: ${ticker}`);
-      });
-
-      // Send initial prices for subscribed stocks
-      const initialPrices = {};
-      subscriptions.forEach(ticker => {
-        initialPrices[ticker] = stockPrices[ticker];
-      });
-      socket.emit('initial-prices', initialPrices);
-
+      socket.emit('user-subscriptions', subscriptions);
     } catch (error) {
       console.error('Error loading user subscriptions:', error);
     }
@@ -88,15 +88,13 @@ const initializeSocket = (io) => {
           await user.save();
         }
 
-        // Join room
-        socket.join(ticker);
         console.log(`${socket.userEmail} subscribed to ${ticker}`);
 
-        // Send current price
-        socket.emit('price-update', { 
-          ticker, 
-          price: stockPrices[ticker],
-          timestamp: new Date().toISOString()
+        // Send updated subscriptions list to client
+        socket.emit('subscription-updated', { 
+          subscriptions: user.subscriptions,
+          action: 'subscribed',
+          ticker 
         });
 
       } catch (error) {
@@ -118,9 +116,14 @@ const initializeSocket = (io) => {
         user.subscriptions = user.subscriptions.filter(s => s !== ticker);
         await user.save();
 
-        // Leave room
-        socket.leave(ticker);
         console.log(`${socket.userEmail} unsubscribed from ${ticker}`);
+
+        // Send updated subscriptions list to client
+        socket.emit('subscription-updated', { 
+          subscriptions: user.subscriptions,
+          action: 'unsubscribed',
+          ticker 
+        });
 
       } catch (error) {
         console.error('Unsubscribe error:', error);

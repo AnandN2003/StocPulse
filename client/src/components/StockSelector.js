@@ -5,11 +5,11 @@ import { subscriptionAPI } from '../api/api';
 import './StockSelector.css';
 
 const SUPPORTED_STOCKS = [
-  { ticker: 'GOOG', name: 'Google (Alphabet)', icon: '🔍' },
-  { ticker: 'TSLA', name: 'Tesla', icon: '⚡' },
-  { ticker: 'AMZN', name: 'Amazon', icon: '📦' },
-  { ticker: 'META', name: 'Meta (Facebook)', icon: '👥' },
-  { ticker: 'NVDA', name: 'NVIDIA', icon: '🎮' },
+  { ticker: 'GOOG', name: 'Google (Alphabet)', logo: '/google.png' },
+  { ticker: 'TSLA', name: 'Tesla', logo: '/brand.png' },
+  { ticker: 'AMZN', name: 'Amazon', logo: '/social.png' },
+  { ticker: 'META', name: 'Meta (Facebook)', logo: '/meta.png' },
+  { ticker: 'NVDA', name: 'NVIDIA', logo: '/nvidia.svg' },
 ];
 
 const StockSelector = () => {
@@ -77,7 +77,7 @@ const StockSelector = () => {
           return (
             <div key={stock.ticker} className="stock-item">
               <div className="stock-info">
-                <span className="stock-icon">{stock.icon}</span>
+                {stock.logo && <img src={stock.logo} alt={stock.ticker} className="stock-selector-logo" />}
                 <div className="stock-details">
                   <div className="stock-ticker">{stock.ticker}</div>
                   <div className="stock-name">{stock.name}</div>

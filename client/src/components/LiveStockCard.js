@@ -2,20 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import './LiveStockCard.css';
 
 const STOCK_INFO = {
-  GOOG: { name: 'Google', icon: '🔍', color: '#4285F4' },
-  TSLA: { name: 'Tesla', icon: '⚡', color: '#E82127' },
-  AMZN: { name: 'Amazon', icon: '📦', color: '#FF9900' },
-  META: { name: 'Meta', icon: '👥', color: '#0668E1' },
-  NVDA: { name: 'NVIDIA', icon: '🎮', color: '#76B900' },
+  GOOG: { name: 'Google', logo: '/google.png', color: '#4285F4' },
+  TSLA: { name: 'Tesla', logo: '/brand.png', color: '#E82127' },
+  AMZN: { name: 'Amazon', logo: '/social.png', color: '#FF9900' },
+  META: { name: 'Meta', logo: '/meta.png', color: '#0668E1' },
+  NVDA: { name: 'NVIDIA', logo: '/nvidia.svg', color: '#76B900' },
 };
 
-const LiveStockCard = ({ ticker, price, connected }) => {
+const LiveStockCard = ({ ticker, price, connected, onClick, isSubscribed }) => {
   const [priceChange, setPriceChange] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const prevPriceRef = useRef(price);
   const [hasReceivedPrice, setHasReceivedPrice] = useState(false);
 
-  const stockInfo = STOCK_INFO[ticker] || { name: ticker, icon: '📊', color: '#888' };
+  const stockInfo = STOCK_INFO[ticker] || { name: ticker, logo: '/default.png', color: '#888' };
 
   useEffect(() => {
     if (price !== undefined && prevPriceRef.current !== undefined && price !== prevPriceRef.current) {
@@ -42,18 +42,35 @@ const LiveStockCard = ({ ticker, price, connected }) => {
     : 0;
 
   return (
-    <div className={`stock-card ${isAnimating ? (priceChange > 0 ? 'price-up' : 'price-down') : ''}`}>
+    <div 
+      className={`stock-card ${isAnimating ? (priceChange > 0 ? 'price-up' : 'price-down') : ''} ${onClick ? 'clickable' : ''}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyPress={(e) => {
+        if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+          onClick();
+        }
+      }}
+    >
       <div className="stock-card-header">
         <div className="stock-title">
-          <span className="stock-card-icon">{stockInfo.icon}</span>
+          <img src={stockInfo.logo} alt={ticker} className="stock-card-logo" />
           <div>
             <div className="stock-card-ticker">{ticker}</div>
             <div className="stock-card-name">{stockInfo.name}</div>
           </div>
         </div>
-        {!connected && (
-          <div className="disconnected-badge">⚠️</div>
-        )}
+        <div className="stock-card-badges">
+          {isSubscribed && (
+            <div className="subscribed-indicator" title="Subscribed">
+              ✓
+            </div>
+          )}
+          {!connected && (
+            <div className="disconnected-badge">⚠️</div>
+          )}
+        </div>
       </div>
 
       <div className="stock-price-section">

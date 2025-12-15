@@ -8,6 +8,10 @@
   overflow: hidden;
 }
 
+.stock-card.clickable {
+  cursor: pointer;
+}
+
 .stock-card::before {
   content: '';
   position: absolute;
@@ -24,10 +28,16 @@
   opacity: 1;
 }
 
-.stock-card:hover {
+.stock-card:hover,
+.stock-card:focus {
   transform: translateY(-5px);
   border-color: var(--primary-blue);
   box-shadow: 0 20px 40px rgba(47, 75, 162, 0.2);
+  outline: none;
+}
+
+.stock-card.clickable:active {
+  transform: translateY(-3px);
 }
 
 .stock-card.price-up {
@@ -63,10 +73,37 @@
   margin-bottom: 1.5rem;
 }
 
+.stock-card-badges {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.subscribed-indicator {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
 .stock-title {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+.stock-card-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .stock-card-icon {

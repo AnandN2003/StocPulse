@@ -50,6 +50,13 @@
   gap: 1rem;
 }
 
+.stock-selector-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 .stock-icon {
   font-size: 2rem;
 }

@@ -99,6 +99,87 @@
   margin: 0 auto;
 }
 
+/* Navigation Tabs */
+.dashboard-nav {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(22, 22, 42, 0.5);
+  border-radius: 12px;
+  padding: 0.5rem;
+  margin-bottom: 3rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.nav-tab:hover {
+  color: var(--text-primary);
+}
+
+.nav-tab.active {
+  color: var(--text-primary);
+}
+
+.nav-icon {
+  font-size: 1.125rem;
+}
+
+.nav-badge {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-pink));
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Tab Content */
+.tab-content {
+  position: relative;
+  min-height: 400px;
+}
+
+.tab-pane {
+  display: none;
+  animation: fadeSlideIn 0.4s ease-out;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .welcome-section {
   margin-bottom: 3rem;
 }
@@ -136,6 +217,13 @@
   gap: 1.5rem;
 }
 
+.stock-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Empty State */
 .empty-state {
   background: var(--bg-card);
   border: 2px dashed var(--border-color);
@@ -159,6 +247,29 @@
 .empty-state p {
   color: var(--text-secondary);
   font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-goto-dashboard {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-pink));
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-goto-dashboard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-goto-dashboard:active {
+  transform: translateY(0);
 }
 
 /* Responsive */
@@ -180,6 +291,22 @@
 
   .welcome-section h1 {
     font-size: 2rem;
+  }
+
+  .dashboard-nav {
+    gap: 0.25rem;
+    padding: 0.25rem;
+  }
+
+  .nav-tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .nav-icon {
+    font-size: 1.25rem;
   }
 
   .stocks-grid {

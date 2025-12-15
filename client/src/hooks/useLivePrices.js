@@ -2,12 +2,16 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
 
 const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
+const ALL_STOCKS = ['GOOG', 'TSLA', 'AMZN', 'META', 'NVDA'];
 
-export const useLivePrices = (subscriptions) => {
+export const useLivePrices = () => {
   const [prices, setPrices] = useState({});
+  const [priceHistory, setPriceHistory] = useState({});
   const [connected, setConnected] = useState(false);
+  const [subscriptions, setSubscriptions] = useState([]);
   const socketRef = useRef(null);
-  const prevSubscriptionsRef = useRef([]);
+
+  const HISTORY_LENGTH = 20; // Keep last 20 price points
 
   // EFFECT 1: Establish Socket.IO connection (runs once or when token changes)
   useEffect(() => {
@@ -20,6 +24,7 @@ export const useLivePrices = (subscriptions) => {
         socketRef.current = null;
         setConnected(false);
         setPrices({});
+        setSubscriptions([]);
       }
       return;
     }
@@ -47,17 +52,61 @@ export const useLivePrices = (subscriptions) => {
       setConnected(false);
     });
 
+    // Receive initial prices for ALL stocks
     socket.on('initial-prices', (initialPrices) => {
-      console.log('📊 Initial prices received:', initialPrices);
+      console.log('📊 Initial prices received for all stocks:', initialPrices);
       setPrices(initialPrices);
+      
+      // Initialize price history for all stocks
+      const initialHistory = {};
+      Object.keys(initialPrices).forEach(ticker => {
+        initialHistory[ticker] = [{ time: Date.now(), price: initialPrices[ticker] }];
+      });
+      console.log('📈 Price history initialized:', initialHistory);
+      setPriceHistory(initialHistory);
     });
 
-    // CRITICAL: This updates the UI in real-time every second
+    // Receive user's subscriptions from server
+    socket.on('user-subscriptions', (userSubscriptions) => {
+      console.log('📋 User subscriptions:', userSubscriptions);
+      setSubscriptions(userSubscriptions);
+    });
+
+    // Listen for subscription updates
+    socket.on('subscription-updated', ({ subscriptions: newSubscriptions, action, ticker }) => {
+      console.log(`✓ Subscription ${action}: ${ticker}`);
+      setSubscriptions(newSubscriptions);
+    });
+
+    // CRITICAL: This updates the UI in real-time every second for ALL stocks
     socket.on('price-update', ({ ticker, price, timestamp }) => {
+      console.log(`💹 Price update for ${ticker}:`, price);
+      
       setPrices(prev => ({
         ...prev,
         [ticker]: price
       }));
+
+      // Update price history with rolling window
+      setPriceHistory(prev => {
+        const currentHistory = prev[ticker] || [];
+        const newHistory = [...currentHistory, { time: Date.now(), price }];
+        
+        // Keep only last HISTORY_LENGTH points
+        if (newHistory.length > HISTORY_LENGTH) {
+          newHistory.shift();
+        }
+        
+        console.log(`📊 Updated history for ${ticker}:`, {
+          length: newHistory.length,
+          latest: newHistory[newHistory.length - 1]
+        });
+        
+        return {
+          ...prev,
+          [ticker]: newHistory
+        };
+      });
     });
 
     socket.on('error', (error) => {
@@ -80,69 +129,41 @@ export const useLivePrices = (subscriptions) => {
     };
   }, []); // Keep empty deps - we handle token changes via storage event
 
-  // EFFECT 2: Auto-subscribe to new stocks when subscriptions change
-  useEffect(() => {
-    if (!socketRef.current || !connected) return;
-
-    // Find newly added subscriptions
-    const newSubscriptions = subscriptions.filter(
-      ticker => !prevSubscriptionsRef.current.includes(ticker)
-    );
-
-    // Find removed subscriptions
-    const removedSubscriptions = prevSubscriptionsRef.current.filter(
-      ticker => !subscriptions.includes(ticker)
-    );
-
-    // Auto-subscribe to new stocks
-    newSubscriptions.forEach(ticker => {
-      console.log('🔔 Auto-subscribing to:', ticker);
-      socketRef.current.emit('subscribe', ticker);
-    });
-
-    // Clean up prices for removed stocks
-    if (removedSubscriptions.length > 0) {
-      setPrices(prev => {
-        const newPrices = { ...prev };
-        removedSubscriptions.forEach(ticker => {
-          delete newPrices[ticker];
-        });
-        return newPrices;
-      });
-    }
-
-    // Update reference to current subscriptions
-    prevSubscriptionsRef.current = subscriptions;
-  }, [subscriptions, connected]);
-
   const subscribe = useCallback((ticker) => {
-    // Manual subscription (called from StockSelector)
+    // Subscribe via socket
     if (socketRef.current && socketRef.current.connected) {
-      console.log('🔔 Manually subscribing to:', ticker);
+      console.log('🔔 Subscribing to:', ticker);
       socketRef.current.emit('subscribe', ticker);
+      return Promise.resolve();
     } else {
       console.warn('⚠️ Cannot subscribe - socket not connected');
+      return Promise.reject(new Error('Socket not connected'));
     }
   }, []);
 
   const unsubscribe = useCallback((ticker) => {
-    // Manual unsubscription (called from StockSelector)
+    // Unsubscribe via socket
     if (socketRef.current && socketRef.current.connected) {
-      console.log('🔕 Manually unsubscribing from:', ticker);
+      console.log('🔕 Unsubscribing from:', ticker);
       socketRef.current.emit('unsubscribe', ticker);
-      
-      // Immediately remove price from state
-      setPrices(prev => {
-        const newPrices = { ...prev };
-        delete newPrices[ticker];
-        return newPrices;
-      });
+      return Promise.resolve();
+    } else {
+      console.warn('⚠️ Cannot unsubscribe - socket not connected');
+      return Promise.reject(new Error('Socket not connected'));
     }
   }, []);
 
+  console.log('[useLivePrices] Returning state:', {
+    pricesKeys: Object.keys(prices),
+    priceHistoryKeys: Object.keys(priceHistory),
+    subscriptions
+  });
+
   return {
     prices,
+    priceHistory,
     connected,
+    subscriptions,
     subscribe,
     unsubscribe,
   };

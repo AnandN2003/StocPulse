@@ -34,6 +34,7 @@ Thumbs.db
 
 # Testing
 coverage/
+.env.example
 
 # Misc
 .cache/

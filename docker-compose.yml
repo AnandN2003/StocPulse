@@ -68,7 +68,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
       
       # CORS - Frontend URL (using nginx proxy, so same origin)
-      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
     networks:
       - stockflow-network
     depends_on:
@@ -76,8 +76,8 @@ services:
         condition: service_healthy
     # Only expose port directly in development
     # In production, nginx proxies to backend
-    # ports:
-    #   - "5000:5000"
+    ports:
+      - "5000:5000"
 
   # ---------------------------------------------------------------------------
   # Frontend - React + Nginx

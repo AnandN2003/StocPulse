@@ -14,6 +14,7 @@ const server = http.createServer(app);
 // CORS configuration
 // In Docker, nginx proxies requests so we allow the configured origin
 const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
+console.log(`CORS Origin configured: ${corsOrigin}`);
 app.use(cors({
   origin: corsOrigin,
   credentials: true

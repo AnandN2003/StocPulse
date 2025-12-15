@@ -173,20 +173,10 @@ docker-compose up --build -d
 
 **Access the app at:** http://localhost:3000
 
-**Stop the application:**
-```bash
-docker-compose down
-
-# To also remove database data:
-docker-compose down -v
-```
-
 This starts three containers:
 - **Frontend** (Nginx) - Serves React app and proxies API requests
 - **Backend** (Node.js) - REST API + Socket.IO server
 - **MongoDB** - Database
-
-See [DOCKER.md](DOCKER.md) for detailed Docker documentation.
 
 ---
 

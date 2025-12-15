@@ -10,8 +10,6 @@ This is a **real-time subscription dashboard** designed to demonstrate:
 -  Clean, scalable architecture
 -  Product-quality frontend UX
 
-**Important:** This is NOT a trading platform. It's a demonstration of real-time WebSocket communication with simulated stock prices.
-
 ##  Features
 
 - **Real-Time Updates**: Stock prices update every second without page refresh
@@ -28,7 +26,6 @@ This is a **real-time subscription dashboard** designed to demonstrate:
 - **React 18** - UI library with functional components
 - **React Router** - Client-side routing
 - **Socket.IO Client** - Real-time WebSocket communication
-- **Three.js** - 3D animated background (FloatingLines component)
 - **Axios** - HTTP client for REST APIs
 - **Context API** - State management
 
@@ -223,7 +220,7 @@ The React app will start on `http://localhost:3000`
 6. **Watch Live**: See real-time price updates every second
 7. **Unsubscribe**: Click "Unsubscribe" to stop tracking a stock
 
-## 🏗️ Architecture & Design Decisions
+## Architecture & Design Decisions
 
 ### Real-Time Communication
 
@@ -240,24 +237,7 @@ The React app will start on `http://localhost:3000`
 4. JWT sent in Socket.IO handshake for WebSocket authentication
 5. Server validates JWT for all protected routes and socket connections
 
-### State Management
-
-- **UserContext**: Global user state, subscriptions, auth functions
-- **useLivePrices Hook**: Manages Socket.IO connection and price state
-- **Local Component State**: Form inputs, UI toggles
-
-### API Endpoints
-
-#### REST API
-
-- `POST /api/auth/signup` - Create new user
-- `POST /api/auth/login` - Authenticate user
-- `GET /api/auth/me` - Get current user (protected)
-- `GET /api/subscriptions` - Get user's subscriptions (protected)
-- `POST /api/subscriptions/subscribe` - Subscribe to stock (protected)
-- `POST /api/subscriptions/unsubscribe` - Unsubscribe from stock (protected)
-
-#### Socket.IO Events
+### Socket.IO Events
 
 **Client → Server:**
 - `subscribe` - Join a stock room
@@ -268,143 +248,10 @@ The React app will start on `http://localhost:3000`
 - `price-update` - Broadcast new price to room members
 - `error` - Send error messages
 
-## 🎨 UI Components
-
-### Landing Page
-- Animated FloatingLines background (Three.js shader)
-- Premium fintech-style hero section
-- Features showcase
-- How it works section
-- Call-to-action sections
-
-### Dashboard
-- Connection status indicator
-- User info and logout
-- Stock selector with subscribe/unsubscribe
-- Live stock cards with:
-  - Real-time price updates
-  - Price change indicators (↑/↓)
-  - Percentage change
-  - Visual feedback on price changes
-
-## 🔒 Security Considerations
-
-- Passwords hashed with bcryptjs
-- JWT tokens expire after 7 days
-- Socket.IO connections authenticated via JWT
-- CORS configured for localhost (update for production)
-- Environment variables for sensitive data
-
-## 🐛 Troubleshooting
-
-### MongoDB Connection Issues
-```bash
-# Make sure MongoDB is running
-net start MongoDB
-
-# Check connection string in server/.env
-MONGODB_URI=mongodb://localhost:27017/stock-broker
-```
-
-### Socket.IO Connection Failed
-```bash
-# Ensure server is running on port 5000
-# Check REACT_APP_SOCKET_URL in client/.env
-REACT_APP_SOCKET_URL=http://localhost:5000
-```
-
-### Port Already in Use
-```bash
-# Server: Change PORT in server/.env
-# Client: Set PORT=3001 in client/.env
-```
-
-## 📝 Environment Variables
-
-### Server (.env)
-```
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/stock-broker
-JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
-NODE_ENV=development
-```
-
-### Client (.env)
-```
-REACT_APP_API_URL=http://localhost:5000
-REACT_APP_SOCKET_URL=http://localhost:5000
-```
-
-## 🚢 Production Deployment
-
-### Docker Deployment (Recommended)
-
-The project includes production-ready Docker configuration:
-
-```bash
-# Clone and navigate to project
-cd "stock broker"
-
-# Configure environment (optional)
-cp .env.example .env
-# Edit .env with your settings
-
-# Build and run
-docker-compose up --build -d
-
-# View logs
-docker-compose logs -f
-
-# Stop
-docker-compose down
-```
-
-**Docker Features:**
-- ✅ Multi-stage builds for optimized images
-- ✅ Nginx reverse proxy with WebSocket support
-- ✅ MongoDB with persistent volumes
-- ✅ Health checks for all services
-- ✅ Automatic service restart
-- ✅ Environment-based configuration
-
-See [DOCKER.md](DOCKER.md) for complete Docker documentation.
-
-### Manual Server Deployment
-1. Set `NODE_ENV=production`
-2. Use strong `JWT_SECRET`
-3. Configure MongoDB Atlas connection string
-4. Update CORS origins
-5. Use HTTPS
-6. Deploy to Heroku, DigitalOcean, AWS, etc.
-
-### Manual Client Deployment
-1. Update API URLs to production backend
-2. Build: `npm run build`
-3. Deploy build folder to Netlify, Vercel, or S3
-
-## 🎓 Learning Outcomes
-
-This project demonstrates:
-- WebSocket communication with Socket.IO
-- JWT authentication flow
-- React Context API for state management
-- Custom React hooks
-- MongoDB schema design
-- RESTful API design
-- Real-time multi-user systems
-- Modern React patterns (functional components, hooks)
-- Professional UI/UX design
-
-## 📄 License
-
-MIT - This is a demonstration/educational project.
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - FloatingLines component adapted from React Bits
 - Stock simulation for educational purposes only
 - No real financial data is used
 
 ---
-
-**Built with ❤️ using the MERN stack**

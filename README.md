@@ -1,18 +1,18 @@
-# 📈 Stock Broker Client Web Dashboard
+# Stock Broker Client Web Dashboard
 
 A real-time stock market dashboard built with the MERN stack (MongoDB, Express, React, Node.js) and Socket.IO for live price streaming.
 
-## 🎯 Project Overview
+##  Project Overview
 
 This is a **real-time subscription dashboard** designed to demonstrate:
-- ✨ Live data streaming with Socket.IO
-- 🔄 Asynchronous multi-user behavior
-- 🏗️ Clean, scalable architecture
-- 🎨 Product-quality frontend UX
+-  Live data streaming with Socket.IO
+-  Asynchronous multi-user behavior
+-  Clean, scalable architecture
+-  Product-quality frontend UX
 
 **Important:** This is NOT a trading platform. It's a demonstration of real-time WebSocket communication with simulated stock prices.
 
-## ⚡ Features
+##  Features
 
 - **Real-Time Updates**: Stock prices update every second without page refresh
 - **User Authentication**: Email-based signup/login with JWT tokens
@@ -22,7 +22,7 @@ This is a **real-time subscription dashboard** designed to demonstrate:
 - **Beautiful UI**: Modern fintech-style landing page with animated background
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Client
 - **React 18** - UI library with functional components
@@ -100,13 +100,14 @@ stock broker/
     └── package.json
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
 - **Node.js** (v16 or higher)
 - **MongoDB** (running locally or MongoDB Compass)
 - **npm** or **yarn**
+- **recharts**
 
 ### Installation
 
@@ -156,7 +157,7 @@ net start MongoDB
 # Or use MongoDB Compass to connect to localhost:27017
 ```
 
-## ▶️ Running the Application
+##  Running the Application
 
 ### Option 1: Docker (Recommended) 🐳
 
